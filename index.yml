@@ -1,0 +1,29 @@
+swagger: "2.0"
+info:
+  description: "Для разработчика система amoCRM представляет из себя реляционную базу данных.
+  В системе есть основные и вспомогательные сущности, по сути таблицы данных,
+  которые могут быть связаны друг с другом. Доступ к ним осуществляется через API."
+  version: "2.0.0"
+  title: "AmoCRM API v2"
+  license:
+    name: "MIT"
+host: "gnzsdev.amocrm.ru"
+basePath: "/api/v2"
+schemes:
+  - https
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+  /account:
+    $ref: './account.yml'
+  /leads:
+    $ref: './leads.yml'
+  /contacts:
+    $ref: './contacts.yml'
+  /companies:
+    $ref: './companies.yml'
+  /customers:
+    $ref: './customers.yml'
