@@ -6,114 +6,125 @@ post:
       name: body
       required: true
       schema:
-        add:
-          type: array
-          items:
-            name:
-              type: string
-            created_at:
-              type: string
-            updated_at:
-              type: string
-            status_id:
-              type: integer
-            responsible_user_id:
-              type: integer
-            sale:
-              type: integer
-            tags:
-              type: array
-              items:
+        type: object
+        properties:
+          add:
+            type: array
+            items:
+              name:
                 type: string
-            contacts_id:
-              type: array
-              items:
+              next_date:
                 type: integer
-            company_id:
-              type: integer
-            catalog_elements_id:
-              type: object
-            custom_fields:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  values:
-                    type: array
-                    items:
-                      allOf:
-                        - type: string
-                        - type: object
-                          properties:
-                            value:
-                              type: string
-                            subtype:
-                              type: string
-                            enum:
-                              type: string
-
-        update:
-          type: array
-          items:
-            id:
-              type: integer
-
-            name:
-              type: string
-            created_at:
-              type: string
-            updated_at:
-              type: string
-            status_id:
-              type: integer
-            responsible_user_id:
-              type: integer
-            sale:
-              type: integer
-            tags:
-              type: array
-              items:
+              created_at:
                 type: string
-            contacts_id:
-              type: array
-              items:
+              updated_at:
+                type: string
+              status_id:
                 type: integer
-            company_id:
-              type: integer
-            custom_fields:
-              type: array
-              items:
+              responsible_user_id:
+                type: integer
+              next_price:
+                type: integer
+              periodicity:
+                type: integer
+              tags:
+                type: string
+              period_id:
+                type: integer
+              contacts_id:
+                type: array
+                items:
+                  type: integer
+              company_id:
+                type: integer
+              catalog_elements_id:
                 type: object
-                properties:
-                  id:
-                    type: integer
-                  values:
-                    type: array
-                    items:
-                      allOf:
-                        - type: string
-                        - type: object
-                          properties:
-                            value:
-                              type: string
-                            subtype:
-                              type: string
-                            enum:
-                              type: string
-            unlink:
-              type: array
-              items:
-                type: object
-                properties:
-                  contacts_id:
-                    type: integer
-                  company_id:
-                    type: array
-                    items:
+              custom_fields:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
                       type: integer
-
+                    values:
+                      type: array
+                      items:
+                        allOf:
+                          - type: string
+                          - type: object
+                            properties:
+                              value:
+                                type: string
+                              subtype:
+                                type: string
+                              enum:
+                                type: string
+          update:
+            type: array
+            items:
+              name:
+                type: string
+              next_date:
+                type: integer
+              created_at:
+                type: string
+              updated_at:
+                type: string
+              status_id:
+                type: integer
+              responsible_user_id:
+                type: integer
+              next_price:
+                type: integer
+              periodicity:
+                type: integer
+              tags:
+                type: string
+              period_id:
+                type: integer
+              contacts_id:
+                type: array
+                items:
+                  type: integer
+              company_id:
+                type: integer
+              catalog_elements_id:
+                type: object
+              custom_fields:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    values:
+                      type: array
+                      items:
+                        allOf:
+                          - type: string
+                          - type: object
+                            properties:
+                              value:
+                                type: string
+                              subtype:
+                                type: string
+                              enum:
+                                type: string
+              unlink:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    contacts_id:
+                      type: integer
+                    company_id:
+                      type: array
+                      items:
+                        type: integer
+          delete:
+            type: array
+            items:
+              type: integer
   responses:
     200:
       description: "Success"
@@ -142,10 +153,11 @@ post:
                               type: string
                             method:
                               type: string
-
+    401:
+      description: "Общая ошибка авторизации. Неправильный логин или пароль."
 get:
   tags:
-    - leads
+    - customers
   parameters:
     - name: id
       in: query
@@ -162,23 +174,12 @@ get:
       in: query
       required: false
       type: integer
-    - name: query
-      in: query
-      required: false
-      type: string
-    - name: responsible_user_id
-      in: query
-      required: false
-      type: integer
     - name: with
       in: query
       required: false
       type: array
       items:
         enum:
-          - is_price_modified_by_robot
-          - loss_reason_name
-          - only_deleted
           - catalog_elements_links
       collectionFormat: csv
     - name: status
@@ -234,8 +235,6 @@ get:
                                     type: string
                                   method:
                                     type: string
-                      group_id:
-                        type: integer
                       company:
                         type: object
                         properties:
@@ -253,9 +252,15 @@ get:
                                     type: string
                                   method:
                                     type: string
-                      closed_at:
+                      next_price:
                         type: integer
                       closest_task_at:
+                        type: integer
+                      period_id:
+                        type: integer
+                      periodicity:
+                        type: integer
+                      next_date:
                         type: integer
                       tags:
                         type: array
@@ -293,29 +298,6 @@ get:
                             type: array
                             items:
                               type: integer
-
-                          _links:
-                            type: object
-                            properties:
-                              self:
-                                type: object
-                                properties:
-                                  href:
-                                    type: string
-                                  method:
-                                    type: string
-                      status_id:
-                         type: integer
-
-                      sale:
-                        type: integer
-
-                      pipeline:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-
                           _links:
                             type: object
                             properties:

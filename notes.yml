@@ -1,0 +1,210 @@
+post:
+  tags:
+    - tasks
+  parameters:
+    - in: body
+      name: body
+      required: true
+      schema:
+        type: object
+        properties:
+          add:
+            type: array
+            items:
+              type: object
+              properties:
+                element_id:
+                  type: integer
+                element_type:
+                  type: integer
+                  enum: [1, 2, 3, 4, 12]
+                note_type:
+                  type: integer
+                  enum: [4, 13, 25, 102, 103]
+                text:
+                  type: string
+                responsible_user_id:
+                  type: integer
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+                params:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+                    service:
+                      type: string
+                    phone:
+                      type: string
+          update:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                element_id:
+                  type: integer
+                element_type:
+                  type: integer
+                  enum: [1, 2, 3, 4, 12]
+                note_type:
+                  type: integer
+                  enum: [4, 13, 25, 102, 103]
+                text:
+                  type: string
+                responsible_user_id:
+                  type: integer
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+                params:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+                    service:
+                      type: string
+                    phone:
+                      type: string
+  responses:
+    200:
+      description: "Success"
+      schema:
+        type: object
+        properties:
+          _embedded:
+            type: object
+            properties:
+              items:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    request_id:
+                      type: integer
+                    _link:
+                      type: object
+                      properties:
+                        self:
+                          type: object
+                          properties:
+                            href:
+                              type: string
+                            method:
+                              type: string
+    401:
+      description: "Общая ошибка авторизации. Неправильный логин или пароль."
+get:
+  tags:
+    - tasks
+  parameters:
+    - name: id
+      in: query
+      required: false
+      type: array
+      items:
+        type: string
+      collectionFormat: csv
+    - name: limit_rows
+      in: query
+      required: false
+      type: integer
+    - name: limit_offset
+      in: query
+      required: false
+      type: integer
+    - name: element_id
+      in: query
+      required: false
+      type: array
+      items:
+        type: integer
+      collectionFormat: csv
+    - name: type
+      in: query
+      required: false
+      type: string
+      enum:
+        - contact
+        - lead
+        - company
+        - task
+      collectionFormat: csv
+    - name: note_type
+      in: query
+      required: false
+      type: integer
+      enum: [4, 13, 25, 102, 103]
+    - name: "if-modified-since"
+      in: header
+      required: false
+      type: string
+  responses:
+    200:
+      schema:
+        type: object
+        properties:
+          _embedded:
+            type: object
+            properties:
+              items:
+                type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      responsible_user_id:
+                        type: integer
+                      created_by:
+                        type: integer
+                      created_at:
+                        type: integer
+                      updated_at:
+                        type: integer
+                      account_id:
+                        type: integer
+                      group_id:
+                        type: integer
+                      element_type:
+                        type: integer
+                      element_id:
+                        type: integer
+                      is_completed:
+                        type: boolean
+                      task_type:
+                        type: integer
+                      complete_till_at:
+                        type: integer
+                      text:
+                        type: string
+                      result:
+                        type: array
+                      _links:
+                        type: object
+                        properties:
+                          self:
+                            type: object
+                            properties:
+                              href:
+                                type: string
+                              method:
+                                type: string
+    401:
+      description: "Общая ошибка авторизации. Неправильный логин или пароль."
+
+
+
+
+
+
+
+
+
+

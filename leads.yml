@@ -22,9 +22,7 @@ post:
             sale:
               type: integer
             tags:
-              type: array
-              items:
-                type: string
+              type: string
             contacts_id:
               type: array
               items:
@@ -72,10 +70,7 @@ post:
               type: integer
             sale:
               type: integer
-            tags:
-              type: array
-              items:
-                type: string
+            tags: string
             contacts_id:
               type: array
               items:
@@ -142,7 +137,8 @@ post:
                               type: string
                             method:
                               type: string
-
+    401:
+      description: "Общая ошибка авторизации. Неправильный логин или пароль."
 get:
   tags:
     - leads

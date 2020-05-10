@@ -27,3 +27,7 @@ paths:
     $ref: './companies.yml'
   /customers:
     $ref: './customers.yml'
+  /tasks:
+    $ref: './tasks.yml'
+  /notes:
+    $ref: './notes.yml'

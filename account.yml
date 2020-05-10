@@ -106,7 +106,6 @@ get:
                   type: array
                   items:
                     $ref: "#/TaskType"
-
     401:
       description: "Общая ошибка авторизации. Неправильный логин или пароль."
 User:

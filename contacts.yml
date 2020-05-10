@@ -158,6 +158,8 @@ post:
                               type: string
                             method:
                               type: string
+    401:
+      description: "Общая ошибка авторизации. Неправильный логин или пароль."
 get:
   tags:
     - contacts
