@@ -18,23 +18,1993 @@ securityDefinitions:
     in: header
 paths:
   /api/v2/account:
-    $ref: './account.yml'
+    get:
+      tags:
+        - "account"
+      parameters:
+        - name: with
+          description: "Если в параметре with указать значения, в ответ придёт информация из аккаунта
+              по соответствующему значению."
+          in: query
+          required: false
+          type: array
+          items:
+            enum:
+              - users
+              - custom_fields
+              - pipelines
+              - groups
+              - note_types
+              - task_types
+          collectionFormat: csv
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: "Через API вы можете получить необходимую информацию по аккаунту: название, оплаченный период,
+              пользователи аккаунта и их права, справочники дополнительных полей контактов и сделок, справочник статусов
+              сделок, справочник типов событий, справочник типов задач и другие параметры аккаунта."
+          schema:
+            $ref: "#/definitions/Account"
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
   /api/v2/leads:
-    $ref: './leads.yml'
+    post:
+      tags:
+        - leads
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              add:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+                    status_id:
+                      type: integer
+                    responsible_user_id:
+                      type: integer
+                    sale:
+                      type: integer
+                    tags:
+                      type: string
+                    contacts_id:
+                      type: array
+                      items:
+                        type: integer
+                    company_id:
+                      type: integer
+                    catalog_elements_id:
+                      type: object
+                    custom_fields:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          values:
+                            type: array
+                            items:
+                              allOf:
+                                - type: string
+                                - type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    subtype:
+                                      type: string
+                                    enum:
+                                      type: string
+              update:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+                    status_id:
+                      type: integer
+                    responsible_user_id:
+                      type: integer
+                    sale:
+                      type: integer
+                    tags:
+                      type: string
+                    contacts_id:
+                      type: array
+                      items:
+                        type: integer
+                    company_id:
+                      type: integer
+                    custom_fields:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          values:
+                            type: array
+                            items:
+                              allOf:
+                                - type: string
+                                - type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    subtype:
+                                      type: string
+                                    enum:
+                                      type: string
+                    unlink:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          contacts_id:
+                            type: integer
+                          company_id:
+                            type: array
+                            items:
+                              type: integer
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        request_id:
+                          type: integer
+                        _links:
+                          $ref: '#/definitions/Links'
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
+    get:
+      tags:
+        - leads
+      parameters:
+        - name: id
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: csv
+        - name: limit_rows
+          in: query
+          required: false
+          type: integer
+        - name: limit_offset
+          in: query
+          required: false
+          type: integer
+        - name: query
+          in: query
+          required: false
+          type: string
+        - name: responsible_user_id
+          in: query
+          required: false
+          type: integer
+        - name: with
+          in: query
+          required: false
+          type: array
+          items:
+            enum:
+              - is_price_modified_by_robot
+              - loss_reason_name
+              - only_deleted
+              - catalog_elements_links
+          collectionFormat: csv
+        - name: status
+          in: query
+          required: false
+          type: array
+          items:
+            type: integer
+          collectionFormat: csv
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        responsible_user_id:
+                          type: integer
+                        created_by:
+                          type: integer
+                        created_at:
+                          type: integer
+                        updated_by:
+                          type: integer
+                        updated_at:
+                          type: integer
+                        account_id:
+                          type: integer
+                        is_deleted:
+                          type: boolean
+                        main_contact:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            _links:
+                              $ref: '#/definitions/Links'
+                        group_id:
+                          type: integer
+                        company:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            _links:
+                              $ref: '#/definitions/Links'
+                        closed_at:
+                          type: integer
+                        closest_task_at:
+                          type: integer
+                        tags:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                        custom_fields:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                              values:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    enum:
+                                      type: integer
+                              is_system:
+                                type: boolean
+                        contacts:
+                          type: object
+                          properties:
+                            id:
+                              type: array
+                              items:
+                                type: integer
+                            _links:
+                              $ref: '#/definitions/Links'
+                        status_id:
+                          type: integer
+                        sale:
+                          type: integer
+                        pipeline:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            _links:
+                              $ref: '#/definitions/Links'
+                        _links:
+                          $ref: '#/definitions/Links'
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
   /api/v2/contacts:
-    $ref: './contacts.yml'
+    post:
+      tags:
+        - contacts
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              add:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    first_name:
+                      type: string
+                    last_name:
+                      type: string
+                    created_at:
+                      type: integer
+                    updated_at:
+                      type: integer
+                    responsible_user_id:
+                      type: integer
+                    created_by:
+                      type: integer
+                    company_name:
+                      type: string
+                    tags:
+                      type: string
+                    leads_id:
+                      type: array
+                      items:
+                        type: integer
+                    customers_id:
+                      type: array
+                      items:
+                        type: integer
+                    company_id:
+                      type: integer
+                    custom_fields:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          values:
+                            type: array
+                            items:
+                              allOf:
+                                - type: string
+                                - type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    enum:
+                                      type: string
+                                    subtype:
+                                      type: string
+              update:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    first_name:
+                      type: string
+                    last_name:
+                      type: string
+                    created_at:
+                      type: integer
+                    updated_at:
+                      type: integer
+                    responsible_user_id:
+                      type: integer
+                    created_by:
+                      type: integer
+                    company_name:
+                      type: string
+                    tags:
+                      type: string
+                    leads_id:
+                      type: array
+                      items:
+                        type: integer
+                    customers_id:
+                      type: array
+                      items:
+                        type: integer
+                    company_id:
+                      type: integer
+                    custom_fields:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          values:
+                            type: array
+                            items:
+                              allOf:
+                                - type: string
+                                - type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    enum:
+                                      type: string
+                                    subtype:
+                                      type: string
+                    unlink:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          leads_id:
+                            type: array
+                            items:
+                              type: integer
+                          company_id:
+                            type: integer
+                          customers_id:
+                            type: array
+                            items:
+                              type: integer
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        request_id:
+                          type: integer
+                        _link:
+                          type: object
+                          properties:
+                            self:
+                              type: object
+                              properties:
+                                href:
+                                  type: string
+                                method:
+                                  type: string
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
+    get:
+      tags:
+        - contacts
+      parameters:
+        - name: id
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: csv
+        - name: limit_rows
+          in: query
+          required: false
+          type: integer
+        - name: limit_offset
+          in: query
+          required: false
+          type: integer
+        - name: query
+          in: query
+          required: false
+          type: string
+        - name: responsible_user_id
+          in: query
+          required: false
+          type: integer
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        responsible_user_id:
+                          type: integer
+                        created_by:
+                          type: integer
+                        created_at:
+                          type: integer
+                        updated_by:
+                          type: integer
+                        updated_at:
+                          type: integer
+                        account_id:
+                          type: integer
+                        is_deleted:
+                          type: boolean
+                        group_id:
+                          type: integer
+                        company:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            _links:
+                              type: object
+                              properties:
+                                self:
+                                  type: object
+                                  properties:
+                                    href:
+                                      type: string
+                                    method:
+                                      type: string
+                        leads:
+                          type: object
+                          properties:
+                            id:
+                              type: array
+                              items:
+                                type: integer
+                            _links:
+                              type: object
+                              properties:
+                                self:
+                                  type: object
+                                  properties:
+                                    href:
+                                      type: string
+                                    method:
+                                      type: string
+                        closed_at:
+                          type: integer
+                        closest_task_at:
+                          type: integer
+                        tags:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                        custom_fields:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                              values:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    enum:
+                                      type: integer
+                              is_system:
+                                type: boolean
+                        customers:
+                          type: object
+                          properties:
+                            id:
+                              type: array
+                              items:
+                                type: integer
+                            _links:
+                              type: object
+                              properties:
+                                self:
+                                  type: object
+                                  properties:
+                                    href:
+                                      type: string
+                                    method:
+                                      type: string
+                        _links:
+                          type: object
+                          properties:
+                            self:
+                              type: object
+                              properties:
+                                href:
+                                  type: string
+                                method:
+                                  type: string
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
   /api/v2/companies:
-    $ref: './companies.yml'
+    post:
+      tags:
+        - companies
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              add:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    first_name:
+                      type: string
+                    last_name:
+                      type: string
+                    created_at:
+                      type: integer
+                    updated_at:
+                      type: integer
+                    responsible_user_id:
+                      type: integer
+                    created_by:
+                      type: integer
+                    tags:
+                      type: string
+                    leads_id:
+                      type: array
+                      items:
+                        type: integer
+                    customers_id:
+                      type: array
+                      items:
+                        type: integer
+                    contacts_id:
+                      type: array
+                      items:
+                        type: integer
+                    custom_fields:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          values:
+                            type: array
+                            items:
+                              allOf:
+                                - type: string
+                                - type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    enum:
+                                      type: string
+                                    subtype:
+                                      type: string
+              update:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    first_name:
+                      type: string
+                    last_name:
+                      type: string
+                    created_at:
+                      type: integer
+                    updated_at:
+                      type: integer
+                    responsible_user_id:
+                      type: integer
+                    created_by:
+                      type: integer
+                    tags:
+                      type: string
+                    leads_id:
+                      type: array
+                      items:
+                        type: integer
+                    customers_id:
+                      type: array
+                      items:
+                        type: integer
+                    contacts_id:
+                      type: array
+                      items:
+                        type: integer
+                    custom_fields:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          values:
+                            type: array
+                            items:
+                              allOf:
+                                - type: string
+                                - type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    enum:
+                                      type: string
+                                    subtype:
+                                      type: string
+                    unlink:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          leads_id:
+                            type: array
+                            items:
+                              type: integer
+                          contacts_id:
+                            type: array
+                            items:
+                              type: integer
+                          customers_id:
+                            type: array
+                            items:
+                              type: integer
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        request_id:
+                          type: integer
+                        _link:
+                          type: object
+                          properties:
+                            self:
+                              type: object
+                              properties:
+                                href:
+                                  type: string
+                                method:
+                                  type: string
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
+    get:
+      tags:
+        - companies
+      parameters:
+        - name: id
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: csv
+        - name: limit_rows
+          in: query
+          required: false
+          type: integer
+        - name: limit_offset
+          in: query
+          required: false
+          type: integer
+        - name: query
+          in: query
+          required: false
+          type: string
+        - name: responsible_user_id
+          in: query
+          required: false
+          type: integer
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        responsible_user_id:
+                          type: integer
+                        created_by:
+                          type: integer
+                        created_at:
+                          type: integer
+                        updated_by:
+                          type: integer
+                        updated_at:
+                          type: integer
+                        account_id:
+                          type: integer
+                        is_deleted:
+                          type: boolean
+                        group_id:
+                          type: integer
+                        company:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            _links:
+                              type: object
+                              properties:
+                                self:
+                                  type: object
+                                  properties:
+                                    href:
+                                      type: string
+                                    method:
+                                      type: string
+                        leads:
+                          type: object
+                          properties:
+                            id:
+                              type: array
+                              items:
+                                type: integer
+                            _links:
+                              type: object
+                              properties:
+                                self:
+                                  type: object
+                                  properties:
+                                    href:
+                                      type: string
+                                    method:
+                                      type: string
+                        customers:
+                          type: object
+                          properties:
+                            id:
+                              type: array
+                              items:
+                                type: integer
+                            _links:
+                              type: object
+                              properties:
+                                self:
+                                  type: object
+                                  properties:
+                                    href:
+                                      type: string
+                                    method:
+                                      type: string
+                        closed_at:
+                          type: integer
+                        closest_task_at:
+                          type: integer
+                        tags:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                        custom_fields:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                              values:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    enum:
+                                      type: integer
+                              is_system:
+                                type: boolean
+                        contacts:
+                          type: object
+                          properties:
+                            id:
+                              type: array
+                              items:
+                                type: integer
+                            _links:
+                              type: object
+                              properties:
+                                self:
+                                  type: object
+                                  properties:
+                                    href:
+                                      type: string
+                                    method:
+                                      type: string
+                        _links:
+                          type: object
+                          properties:
+                            self:
+                              type: object
+                              properties:
+                                href:
+                                  type: string
+                                method:
+                                  type: string
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
   /api/v2/customers:
-    $ref: './customers.yml'
+    post:
+      tags:
+        - contacts
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              add:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    first_name:
+                      type: string
+                    last_name:
+                      type: string
+                    created_at:
+                      type: integer
+                    updated_at:
+                      type: integer
+                    responsible_user_id:
+                      type: integer
+                    created_by:
+                      type: integer
+                    company_name:
+                      type: string
+                    tags:
+                      type: string
+                    leads_id:
+                      type: array
+                      items:
+                        type: integer
+                    customers_id:
+                      type: array
+                      items:
+                        type: integer
+                    company_id:
+                      type: integer
+                    custom_fields:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          values:
+                            type: array
+                            items:
+                              allOf:
+                                - type: string
+                                - type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    enum:
+                                      type: string
+                                    subtype:
+                                      type: string
+              update:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    first_name:
+                      type: string
+                    last_name:
+                      type: string
+                    created_at:
+                      type: integer
+                    updated_at:
+                      type: integer
+                    responsible_user_id:
+                      type: integer
+                    created_by:
+                      type: integer
+                    company_name:
+                      type: string
+                    tags:
+                      type: string
+                    leads_id:
+                      type: array
+                      items:
+                        type: integer
+                    customers_id:
+                      type: array
+                      items:
+                        type: integer
+                    company_id:
+                      type: integer
+                    custom_fields:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          values:
+                            type: array
+                            items:
+                              allOf:
+                                - type: string
+                                - type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    enum:
+                                      type: string
+                                    subtype:
+                                      type: string
+                    unlink:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          leads_id:
+                            type: array
+                            items:
+                              type: integer
+                          company_id:
+                            type: integer
+                          customers_id:
+                            type: array
+                            items:
+                              type: integer
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        request_id:
+                          type: integer
+                        _link:
+                          type: object
+                          properties:
+                            self:
+                              type: object
+                              properties:
+                                href:
+                                  type: string
+                                method:
+                                  type: string
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
+    get:
+      tags:
+        - contacts
+      parameters:
+        - name: id
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: csv
+        - name: limit_rows
+          in: query
+          required: false
+          type: integer
+        - name: limit_offset
+          in: query
+          required: false
+          type: integer
+        - name: query
+          in: query
+          required: false
+          type: string
+        - name: responsible_user_id
+          in: query
+          required: false
+          type: integer
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        responsible_user_id:
+                          type: integer
+                        created_by:
+                          type: integer
+                        created_at:
+                          type: integer
+                        updated_by:
+                          type: integer
+                        updated_at:
+                          type: integer
+                        account_id:
+                          type: integer
+                        is_deleted:
+                          type: boolean
+                        group_id:
+                          type: integer
+                        company:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            _links:
+                              type: object
+                              properties:
+                                self:
+                                  type: object
+                                  properties:
+                                    href:
+                                      type: string
+                                    method:
+                                      type: string
+                        leads:
+                          type: object
+                          properties:
+                            id:
+                              type: array
+                              items:
+                                type: integer
+                            _links:
+                              type: object
+                              properties:
+                                self:
+                                  type: object
+                                  properties:
+                                    href:
+                                      type: string
+                                    method:
+                                      type: string
+                        closed_at:
+                          type: integer
+                        closest_task_at:
+                          type: integer
+                        tags:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                        custom_fields:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                              values:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    enum:
+                                      type: integer
+                              is_system:
+                                type: boolean
+                        customers:
+                          type: object
+                          properties:
+                            id:
+                              type: array
+                              items:
+                                type: integer
+                            _links:
+                              type: object
+                              properties:
+                                self:
+                                  type: object
+                                  properties:
+                                    href:
+                                      type: string
+                                    method:
+                                      type: string
+                        _links:
+                          type: object
+                          properties:
+                            self:
+                              type: object
+                              properties:
+                                href:
+                                  type: string
+                                method:
+                                  type: string
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
   /api/v2/tasks:
-    $ref: './tasks.yml'
+    post:
+      tags:
+        - tasks
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              add:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    element_id:
+                      type: integer
+                    element_type:
+                      type: integer
+                      enum: [1, 2, 3, 12]
+                    complete_till:
+                      type: integer
+                    task_type:
+                      type: integer
+                      enum: [1, 2, 3]
+                    text:
+                      type: string
+                    is_completed:
+                      type: boolean
+                    responsible_user_id:
+                      type: integer
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+                    created_by:
+                      type: integer
+              update:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    element_id:
+                      type: integer
+                    element_type:
+                      type: integer
+                      enum: [1, 2, 3, 12]
+                    complete_till:
+                      type: integer
+                    task_type:
+                      type: integer
+                      enum: [1, 2, 3]
+                    text:
+                      type: string
+                    is_completed:
+                      type: boolean
+                    responsible_user_id:
+                      type: integer
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+                    created_by:
+                      type: integer
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        request_id:
+                          type: integer
+                        _link:
+                          type: object
+                          properties:
+                            self:
+                              type: object
+                              properties:
+                                href:
+                                  type: string
+                                method:
+                                  type: string
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
+    get:
+      tags:
+        - tasks
+      parameters:
+        - name: id
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: csv
+        - name: limit_rows
+          in: query
+          required: false
+          type: integer
+        - name: limit_offset
+          in: query
+          required: false
+          type: integer
+        - name: with
+          in: query
+          required: false
+          type: array
+          items:
+            enum:
+              - catalog_elements_links
+          collectionFormat: csv
+        - name: element_id
+          in: query
+          required: false
+          type: array
+          items:
+            type: integer
+          collectionFormat: csv
+        - name: type
+          in: query
+          required: false
+          type: array
+          items:
+            type: integer
+          collectionFormat: csv
+        - name: filter
+          in: query
+          required: false
+          type: object
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        responsible_user_id:
+                          type: integer
+                        created_by:
+                          type: integer
+                        created_at:
+                          type: integer
+                        updated_at:
+                          type: integer
+                        account_id:
+                          type: integer
+                        group_id:
+                          type: integer
+                        element_type:
+                          type: integer
+                        element_id:
+                          type: integer
+                        is_completed:
+                          type: boolean
+                        task_type:
+                          type: integer
+                        complete_till_at:
+                          type: integer
+                        text:
+                          type: string
+                        result:
+                          type: array
+                        _links:
+                          type: object
+                          properties:
+                            self:
+                              type: object
+                              properties:
+                                href:
+                                  type: string
+                                method:
+                                  type: string
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
   /api/v2/notes:
-    $ref: './notes.yml'
+    post:
+      tags:
+        - tasks
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              add:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    element_id:
+                      type: integer
+                    element_type:
+                      type: integer
+                      enum: [1, 2, 3, 4, 12]
+                    note_type:
+                      type: integer
+                      enum: [4, 13, 25, 102, 103]
+                    text:
+                      type: string
+                    responsible_user_id:
+                      type: integer
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+                    params:
+                      type: object
+                      properties:
+                        text:
+                          type: string
+                        service:
+                          type: string
+                        phone:
+                          type: string
+              update:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    element_id:
+                      type: integer
+                    element_type:
+                      type: integer
+                      enum: [1, 2, 3, 4, 12]
+                    note_type:
+                      type: integer
+                      enum: [4, 13, 25, 102, 103]
+                    text:
+                      type: string
+                    responsible_user_id:
+                      type: integer
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+                    params:
+                      type: object
+                      properties:
+                        text:
+                          type: string
+                        service:
+                          type: string
+                        phone:
+                          type: string
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        request_id:
+                          type: integer
+                        _link:
+                          type: object
+                          properties:
+                            self:
+                              type: object
+                              properties:
+                                href:
+                                  type: string
+                                method:
+                                  type: string
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
+    get:
+      tags:
+        - tasks
+      parameters:
+        - name: id
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: csv
+        - name: limit_rows
+          in: query
+          required: false
+          type: integer
+        - name: limit_offset
+          in: query
+          required: false
+          type: integer
+        - name: element_id
+          in: query
+          required: false
+          type: array
+          items:
+            type: integer
+          collectionFormat: csv
+        - name: type
+          in: query
+          required: false
+          type: string
+          enum:
+            - contact
+            - lead
+            - company
+            - task
+          collectionFormat: csv
+        - name: note_type
+          in: query
+          required: false
+          type: integer
+          enum: [4, 13, 25, 102, 103]
+        - name: "if-modified-since"
+          in: header
+          required: false
+          type: string
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        responsible_user_id:
+                          type: integer
+                        created_by:
+                          type: integer
+                        created_at:
+                          type: integer
+                        updated_at:
+                          type: integer
+                        account_id:
+                          type: integer
+                        group_id:
+                          type: integer
+                        element_type:
+                          type: integer
+                        element_id:
+                          type: integer
+                        note_type:
+                          type: integer
+                        text:
+                          type: string
+                        is_editable:
+                          type: boolean
+                        attachment:
+                          type: string
+                        _links:
+                          type: object
+                          properties:
+                            self:
+                              type: object
+                              properties:
+                                href:
+                                  type: string
+                                method:
+                                  type: string
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
   /api/v2/fields:
-    $ref: './custom_fields.yml'
+    post:
+      tags:
+        - tasks
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              add:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    type:
+                      type: integer
+                      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17]
+                    element_type:
+                      type: integer
+                    origin:
+                      type: string
+                    is_editable:
+                      type: boolean
+                    enums:
+                      type: array
+                      items:
+                        type: string
+                    request_id:
+                      type: integer
+                    is_required:
+                      type: boolean
+                    is_deletable:
+                      type: boolean
+                    is_visible:
+                      type: boolean
+              delete:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    origin:
+                      type: string
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        request_id:
+                          type: integer
+                        _link:
+                          type: object
+                          properties:
+                            self:
+                              type: object
+                              properties:
+                                href:
+                                  type: string
+                                method:
+                                  type: string
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
   /private/api/v2/json/pipelines/set:
-    $ref: './pipelines.yml'
+    post:
+      tags:
+        - pipelines
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              request:
+                type: object
+                properties:
+                  pipelines:
+                    type: object
+                    properties:
+                      add:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            sort:
+                              type: integer
+                            is_main:
+                              type: string
+                            statuses:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                sort:
+                                  type: integer
+                                color:
+                                  type: string
+                      update:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            sort:
+                              type: integer
+                            is_main:
+                              type: string
+                            statuses:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                sort:
+                                  type: integer
+                                color:
+                                  type: string
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              response:
+                type: object
+                properties:
+                  pipelines:
+                    type: object
+                    properties:
+                      add:
+                        type: object
+                        properties:
+                          pipelines:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                value:
+                                  type: integer
+                                name:
+                                  type: string
+                                sort:
+                                  type: integer
+                                is_main:
+                                  type: integer
+                                statuses:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      id:
+                                        type: integer
+                                      name:
+                                        type: string
+                                      color:
+                                        type: string
+                                      sort:
+                                        type: integer
+                                      editable:
+                                        type: string
+                                      pipeline_id:
+                                        type: integer
+                                leads:
+                                  type: integer
+                      update:
+                        type: object
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
+    get:
+      tags:
+        - tasks
+      parameters:
+        - name: id
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: csv
+        - name: limit_rows
+          in: query
+          required: false
+          type: integer
+        - name: limit_offset
+          in: query
+          required: false
+          type: integer
+        - name: element_id
+          in: query
+          required: false
+          type: array
+          items:
+            type: integer
+          collectionFormat: csv
+        - name: type
+          in: query
+          required: false
+          type: string
+          enum:
+            - contact
+            - lead
+            - company
+            - task
+          collectionFormat: csv
+        - name: note_type
+          in: query
+          required: false
+          type: integer
+          enum: [4, 13, 25, 102, 103]
+        - name: "if-modified-since"
+          in: header
+          required: false
+          type: string
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        responsible_user_id:
+                          type: integer
+                        created_by:
+                          type: integer
+                        created_at:
+                          type: integer
+                        updated_at:
+                          type: integer
+                        account_id:
+                          type: integer
+                        group_id:
+                          type: integer
+                        element_type:
+                          type: integer
+                        element_id:
+                          type: integer
+                        note_type:
+                          type: integer
+                        text:
+                          type: string
+                        is_editable:
+                          type: boolean
+                        attachment:
+                          type: string
+                        _links:
+                          type: object
+                          properties:
+                            self:
+                              type: object
+                              properties:
+                                href:
+                                  type: string
+                                method:
+                                  type: string
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
   /private/api/v2/json/pipelines/delete:
     post:
       tags:
@@ -110,15 +2080,7 @@ paths:
                             is_editable:
                               type: boolean
               _links:
-                type: object
-                properties:
-                  self:
-                    type: object
-                    properties:
-                      href:
-                        type: string
-                      method:
-                        type: string
+                $ref: '#/definitions/Links'
         401:
           description: "Общая ошибка авторизации. Неправильный логин или пароль."
   /api/v2/catalogs:
@@ -180,16 +2142,8 @@ paths:
           schema:
             type: object
             properties:
-              _link:
-                type: object
-                properties:
-                  self:
-                    type: object
-                    properties:
-                      href:
-                        type: string
-                      method:
-                        type: string
+              _links:
+                $ref: '#/definitions/Links'
               _embedded:
                 type: object
                 properties:
@@ -200,16 +2154,8 @@ paths:
                       properties:
                         id:
                           type: integer
-                        _link:
-                          type: object
-                          properties:
-                            self:
-                              type: object
-                              properties:
-                                href:
-                                  type: string
-                                method:
-                                  type: string
+                        _links:
+                          $ref: '#/definitions/Links'
 
         401:
           description: "Общая ошибка авторизации. Неправильный логин или пароль."
@@ -228,15 +2174,7 @@ paths:
             type: object
             properties:
               _links:
-                type: object
-                properties:
-                  self:
-                    type: object
-                    properties:
-                      href:
-                        type: string
-                      method:
-                        type: string
+                $ref: '#/definitions/Links'
               _ebedded:
                 type: object
                 properties:
@@ -369,16 +2307,8 @@ paths:
                           type: integer
                         request_id:
                           type: integer
-                        _link:
-                          type: object
-                          properties:
-                            self:
-                              type: object
-                              properties:
-                                href:
-                                  type: string
-                                method:
-                                  type: string
+                        _links:
+                          $ref: '#/definitions/Links'
         401:
           description: "Общая ошибка авторизации. Неправильный логин или пароль."
     get:
@@ -451,3 +2381,205 @@ paths:
                                 type: boolean
         401:
           description: "Общая ошибка авторизации. Неправильный логин или пароль."
+definitions:
+  Account:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      subdomain:
+        type: string
+      currency:
+        type: string
+      timezone:
+        type: string
+      timezone_offset:
+        type: string
+      language:
+        type: string
+      date_pattern:
+        type: object
+        properties:
+          date:
+            type: string
+          date_time:
+            type: string
+          time:
+            type: string
+          time_full:
+            type: string
+      current_user:
+        type: integer
+      _embedded:
+        type: object
+        properties:
+          users:
+            type: array
+            items:
+              $ref: "#/definitions/User"
+          custom_fields:
+            type: object
+            properties:
+              catalogs:
+                type: array
+                items:
+                  type: array
+                  items:
+                    $ref: "#/definitions/CustomField"
+              companies:
+                type: array
+                items:
+                  $ref: "#/definitions/CustomField"
+              contacts:
+                type: array
+                items:
+                  $ref: "#/definitions/CustomField"
+              customers:
+                type: array
+                items:
+                  $ref: "#/definitions/CustomField"
+              leads:
+                type: array
+                items:
+                  $ref: "#/definitions/CustomField"
+          groups:
+            type: array
+            items:
+              $ref: "#/definitions/Group"
+          note_types:
+            type: array
+            items:
+              $ref: "#/definitions/NoteType"
+          pipelines:
+            type: array
+            items:
+              $ref: "#/definitions/Pipeline"
+          task_type:
+            type: array
+            items:
+              $ref: "#/definitions/TaskType"
+
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+      group_id:
+        type: integer
+      is_active:
+        type: boolean
+      is_admin:
+        type: boolean
+      is_free:
+        type: boolean
+      languange:
+        type: string
+      last_name:
+        type: string
+      login:
+        type: string
+      name:
+        type: string
+      phone_number:
+        type: string
+      rights:
+        type: object
+
+  CustomField:
+    type: object
+    properties:
+      id:
+        type: integer
+      code:
+        type: string
+      enums:
+        type: object
+      field_type:
+        type: integer
+      is_deletable:
+        type: boolean
+      is_editable:
+        type: boolean
+      is_multiple:
+        type: boolean
+      is_required:
+        type: boolean
+      is_system:
+        type: boolean
+      is_visible:
+        type: boolean
+      name:
+        type: string
+      params:
+        type: object
+      sort:
+        type: integer
+
+  Group:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+
+  NoteType:
+    type: object
+    properties:
+      id:
+        type: integer
+      code:
+        type: string
+      is_editable:
+        type: boolean
+
+  Pipeline:
+    type: object
+    properties:
+      id:
+        type: integer
+      is_main:
+        type: boolean
+      name:
+        type: string
+      sort:
+        type: integer
+      statuses:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            color:
+              type: string
+            is_editable:
+              type: boolean
+            sort:
+              type: integer
+
+  TaskType:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      icon_id:
+        type: integer
+      color:
+        type: string
+  Links:
+    type: object
+    properties:
+      self:
+        type: object
+        properties:
+          href:
+            type: string
+          method:
+            type: string
