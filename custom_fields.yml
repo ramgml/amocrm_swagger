@@ -1,0 +1,77 @@
+post:
+  tags:
+    - tasks
+  parameters:
+    - in: body
+      name: body
+      required: true
+      schema:
+        type: object
+        properties:
+          add:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                type:
+                  type: integer
+                  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17]
+                element_type:
+                  type: integer
+                origin:
+                  type: string
+                is_editable:
+                  type: boolean
+                enums:
+                  type: array
+                  items:
+                    type: string
+                request_id:
+                  type: integer
+                is_required:
+                  type: boolean
+                is_deletable:
+                  type: boolean
+                is_visible:
+                  type: boolean
+          delete:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                origin:
+                  type: string
+  responses:
+    200:
+      description: "Success"
+      schema:
+        type: object
+        properties:
+          _embedded:
+            type: object
+            properties:
+              items:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    request_id:
+                      type: integer
+                    _link:
+                      type: object
+                      properties:
+                        self:
+                          type: object
+                          properties:
+                            href:
+                              type: string
+                            method:
+                              type: string
+    401:
+      description: "Общая ошибка авторизации. Неправильный логин или пароль."

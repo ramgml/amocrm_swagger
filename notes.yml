@@ -155,47 +155,45 @@ get:
             properties:
               items:
                 type: array
-                  items:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                      responsible_user_id:
-                        type: integer
-                      created_by:
-                        type: integer
-                      created_at:
-                        type: integer
-                      updated_at:
-                        type: integer
-                      account_id:
-                        type: integer
-                      group_id:
-                        type: integer
-                      element_type:
-                        type: integer
-                      element_id:
-                        type: integer
-                      is_completed:
-                        type: boolean
-                      task_type:
-                        type: integer
-                      complete_till_at:
-                        type: integer
-                      text:
-                        type: string
-                      result:
-                        type: array
-                      _links:
-                        type: object
-                        properties:
-                          self:
-                            type: object
-                            properties:
-                              href:
-                                type: string
-                              method:
-                                type: string
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    responsible_user_id:
+                      type: integer
+                    created_by:
+                      type: integer
+                    created_at:
+                      type: integer
+                    updated_at:
+                      type: integer
+                    account_id:
+                      type: integer
+                    group_id:
+                      type: integer
+                    element_type:
+                      type: integer
+                    element_id:
+                      type: integer
+                    note_type:
+                      type: integer
+                    text:
+                      type: string
+                    is_editable:
+                      type: boolean
+                    attachment:
+                      type: string
+                    _links:
+                      type: object
+                      properties:
+                        self:
+                          type: object
+                          properties:
+                            href:
+                              type: string
+                            method:
+                              type: string
     401:
       description: "Общая ошибка авторизации. Неправильный логин или пароль."
 

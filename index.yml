@@ -8,7 +8,7 @@ info:
   license:
     name: "MIT"
 host: "gnzsdev.amocrm.ru"
-basePath: "/api/v2"
+basePath: "/"
 schemes:
   - https
 securityDefinitions:
@@ -17,17 +17,437 @@ securityDefinitions:
     name: Authorization
     in: header
 paths:
-  /account:
+  /api/v2/account:
     $ref: './account.yml'
-  /leads:
+  /api/v2/leads:
     $ref: './leads.yml'
-  /contacts:
+  /api/v2/contacts:
     $ref: './contacts.yml'
-  /companies:
+  /api/v2/companies:
     $ref: './companies.yml'
-  /customers:
+  /api/v2/customers:
     $ref: './customers.yml'
-  /tasks:
+  /api/v2/tasks:
     $ref: './tasks.yml'
-  /notes:
+  /api/v2/notes:
     $ref: './notes.yml'
+  /api/v2/fields:
+    $ref: './custom_fields.yml'
+  /private/api/v2/json/pipelines/set:
+    $ref: './pipelines.yml'
+  /private/api/v2/json/pipelines/delete:
+    post:
+      tags:
+        - pipelines
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              request:
+                type: object
+                properties:
+                  id:
+                    allOf:
+                      - type: array
+                        items:
+                          type: integer
+                      - type: integer
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              response:
+                type: object
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
+  /api/v2/pipelines:
+    get:
+      tags:
+        - pipelines
+      parameters:
+        - name: id
+          in: query
+          required: false
+          type: integer
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        sort:
+                          type: integer
+                        is_main:
+                          type: boolean
+                        statuses:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            color:
+                              type: string
+                            sort:
+                              type: integer
+                            is_editable:
+                              type: boolean
+              _links:
+                type: object
+                properties:
+                  self:
+                    type: object
+                    properties:
+                      href:
+                        type: string
+                      method:
+                        type: string
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
+  /api/v2/catalogs:
+    post:
+      tags:
+        - catalogs
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              add:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    type:
+                      type: string
+                      enum: [regular, invoices]
+                    can_add_elements:
+                      type: boolean
+                    can_show_in_cards:
+                      type: boolean
+                    can_link_multiple:
+                      type: boolean
+                    request_id:
+                      type: integer
+              update:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    type:
+                      type: string
+                      enum: [regular, invoices]
+                    can_add_elements:
+                      type: boolean
+                    can_show_in_cards:
+                      type: boolean
+                    can_link_multiple:
+                      type: boolean
+                    request_id:
+                      type: integer
+              delete:
+                type: array
+                items:
+                  type: integer
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _link:
+                type: object
+                properties:
+                  self:
+                    type: object
+                    properties:
+                      href:
+                        type: string
+                      method:
+                        type: string
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        _link:
+                          type: object
+                          properties:
+                            self:
+                              type: object
+                              properties:
+                                href:
+                                  type: string
+                                method:
+                                  type: string
+
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
+    get:
+      tags:
+        - catalogs
+      parameters:
+        - name: id
+          in: query
+          required: false
+          type: integer
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _links:
+                type: object
+                properties:
+                  self:
+                    type: object
+                    properties:
+                      href:
+                        type: string
+                      method:
+                        type: string
+              _ebedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        sort:
+                          type: integer
+                        is_main:
+                          type: boolean
+                        statuses:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                              color:
+                                type: string
+                              sort:
+                                type: integer
+                              is_editable:
+                                type: boolean
+  /api/v2/catalog_elements:
+    post:
+      tags:
+        - catalog_elements
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              add:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    catalog_id:
+                      type: integer
+                    request_id:
+                      type: integer
+                    custom_fields:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          values:
+                            type: array
+                            items:
+                              allOf:
+                                - type: string
+                                - type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    subtype:
+                                      type: string
+                                    enum:
+                                      type: string
+
+              update:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    catalog_id:
+                      type: integer
+                    request_id:
+                      type: integer
+                    updated_at:
+                      type: integer
+                    custom_fields:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          values:
+                            type: array
+                            items:
+                              allOf:
+                                - type: string
+                                - type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    subtype:
+                                      type: string
+                                    enum:
+                                      type: string
+
+              delete:
+                type: array
+                items:
+                  type: integer
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        request_id:
+                          type: integer
+                        _link:
+                          type: object
+                          properties:
+                            self:
+                              type: object
+                              properties:
+                                href:
+                                  type: string
+                                method:
+                                  type: string
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
+    get:
+      tags:
+        - catalog_elements
+      parameters:
+        - name: id
+          in: query
+          required: false
+          type: integer
+        - name: catalog_id
+          in: query
+          required: true
+          type: integer
+        - name: term
+          in: query
+          required: false
+          type: string
+        - name: page
+          in: query
+          required: false
+          type: integer
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: object
+            properties:
+              _embedded:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        created_by:
+                          type: integer
+                        created_at:
+                          type: integer
+                        updated_at:
+                          type: integer
+                        updated_by:
+                          type: integer
+                        is_deleted:
+                          type: boolean
+                        custom_fields:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                              values:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    enum:
+                                      type: integer
+                              is_system:
+                                type: boolean
+        401:
+          description: "Общая ошибка авторизации. Неправильный логин или пароль."
