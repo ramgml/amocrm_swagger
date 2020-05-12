@@ -56,7 +56,7 @@ paths:
         - Bearer: []
       parameters:
         - in: body
-          name: body
+          name: leads_post
           required: true
           schema:
             type: object
@@ -91,23 +91,7 @@ paths:
                     custom_fields:
                       type: array
                       items:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          values:
-                            type: array
-                            items:
-                              allOf:
-                                - type: string
-                                - type: object
-                                  properties:
-                                    value:
-                                      type: string
-                                    subtype:
-                                      type: string
-                                    enum:
-                                      type: string
+                        $ref: "#/definitions/EmbeddedCustomField"
               update:
                 type: array
                 items:
@@ -138,23 +122,7 @@ paths:
                     custom_fields:
                       type: array
                       items:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          values:
-                            type: array
-                            items:
-                              allOf:
-                                - type: string
-                                - type: object
-                                  properties:
-                                    value:
-                                      type: string
-                                    subtype:
-                                      type: string
-                                    enum:
-                                      type: string
+                        $ref: "#/definitions/EmbeddedCustomField"
                     unlink:
                       type: array
                       items:
@@ -170,22 +138,7 @@ paths:
         200:
           description: "Success"
           schema:
-            type: object
-            properties:
-              _embedded:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        request_id:
-                          type: integer
-                        _links:
-                          $ref: '#/definitions/Links'
+            $ref: "#/definitions/PostSuccessResponse"
         401:
           description: "Общая ошибка авторизации. Неправильный логин или пароль."
     get:
@@ -301,23 +254,7 @@ paths:
                         custom_fields:
                           type: array
                           items:
-                            type: object
-                            properties:
-                              id:
-                                type: integer
-                              name:
-                                type: string
-                              values:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    value:
-                                      type: string
-                                    enum:
-                                      type: integer
-                              is_system:
-                                type: boolean
+                            $ref: "#/definitions/EmbeddedCustomFieldResponse"
                         contacts:
                           type: object
                           properties:
@@ -350,7 +287,7 @@ paths:
         - contacts
       parameters:
         - in: body
-          name: body
+          name: contacts_post
           required: true
           schema:
             type: object
@@ -391,23 +328,7 @@ paths:
                     custom_fields:
                       type: array
                       items:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          values:
-                            type: array
-                            items:
-                              allOf:
-                                - type: string
-                                - type: object
-                                  properties:
-                                    value:
-                                      type: string
-                                    enum:
-                                      type: string
-                                    subtype:
-                                      type: string
+                        $ref: "#/definitions/EmbeddedCustomField"
               update:
                 type: array
                 items:
@@ -446,23 +367,7 @@ paths:
                     custom_fields:
                       type: array
                       items:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          values:
-                            type: array
-                            items:
-                              allOf:
-                                - type: string
-                                - type: object
-                                  properties:
-                                    value:
-                                      type: string
-                                    enum:
-                                      type: string
-                                    subtype:
-                                      type: string
+                        $ref: "#/definitions/EmbeddedCustomField"
                     unlink:
                       type: array
                       items:
@@ -482,30 +387,7 @@ paths:
         200:
           description: "Success"
           schema:
-            type: object
-            properties:
-              _embedded:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        request_id:
-                          type: integer
-                        _link:
-                          type: object
-                          properties:
-                            self:
-                              type: object
-                              properties:
-                                href:
-                                  type: string
-                                method:
-                                  type: string
+            $ref: "#/definitions/PostSuccessResponse"
         401:
           description: "Общая ошибка авторизации. Неправильный логин или пароль."
     get:
@@ -605,23 +487,7 @@ paths:
                         custom_fields:
                           type: array
                           items:
-                            type: object
-                            properties:
-                              id:
-                                type: integer
-                              name:
-                                type: string
-                              values:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    value:
-                                      type: string
-                                    enum:
-                                      type: integer
-                              is_system:
-                                type: boolean
+                            $ref: "#/definitions/EmbeddedCustomFieldResponse"
                         customers:
                           type: object
                           properties:
@@ -643,7 +509,7 @@ paths:
         - companies
       parameters:
         - in: body
-          name: body
+          name: companies_post
           required: true
           schema:
             type: object
@@ -684,23 +550,7 @@ paths:
                     custom_fields:
                       type: array
                       items:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          values:
-                            type: array
-                            items:
-                              allOf:
-                                - type: string
-                                - type: object
-                                  properties:
-                                    value:
-                                      type: string
-                                    enum:
-                                      type: string
-                                    subtype:
-                                      type: string
+                        $ref: "#/definitions/EmbeddedCustomField"
               update:
                 type: array
                 items:
@@ -739,23 +589,7 @@ paths:
                     custom_fields:
                       type: array
                       items:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          values:
-                            type: array
-                            items:
-                              allOf:
-                                - type: string
-                                - type: object
-                                  properties:
-                                    value:
-                                      type: string
-                                    enum:
-                                      type: string
-                                    subtype:
-                                      type: string
+                        $ref: "#/definitions/EmbeddedCustomField"
                     unlink:
                       type: array
                       items:
@@ -777,30 +611,8 @@ paths:
         200:
           description: "Success"
           schema:
-            type: object
-            properties:
-              _embedded:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        request_id:
-                          type: integer
-                        _link:
-                          type: object
-                          properties:
-                            self:
-                              type: object
-                              properties:
-                                href:
-                                  type: string
-                                method:
-                                  type: string
+            $ref: "#/definitions/PostSuccessResponse"
+
         401:
           description: "Общая ошибка авторизации. Неправильный логин или пароль."
     get:
@@ -909,23 +721,7 @@ paths:
                         custom_fields:
                           type: array
                           items:
-                            type: object
-                            properties:
-                              id:
-                                type: integer
-                              name:
-                                type: string
-                              values:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    value:
-                                      type: string
-                                    enum:
-                                      type: integer
-                              is_system:
-                                type: boolean
+                            $ref: "#/definitions/EmbeddedCustomFieldResponse"
                         contacts:
                           type: object
                           properties:
@@ -944,10 +740,10 @@ paths:
       security:
         - Bearer: []
       tags:
-        - contacts
+        - customers
       parameters:
         - in: body
-          name: body
+          name: customers_post
           required: true
           schema:
             type: object
@@ -988,23 +784,7 @@ paths:
                     custom_fields:
                       type: array
                       items:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          values:
-                            type: array
-                            items:
-                              allOf:
-                                - type: string
-                                - type: object
-                                  properties:
-                                    value:
-                                      type: string
-                                    enum:
-                                      type: string
-                                    subtype:
-                                      type: string
+                        $ref: "#/definitions/EmbeddedCustomField"
               update:
                 type: array
                 items:
@@ -1043,23 +823,7 @@ paths:
                     custom_fields:
                       type: array
                       items:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          values:
-                            type: array
-                            items:
-                              allOf:
-                                - type: string
-                                - type: object
-                                  properties:
-                                    value:
-                                      type: string
-                                    enum:
-                                      type: string
-                                    subtype:
-                                      type: string
+                        $ref: "#/definitions/EmbeddedCustomField"
                     unlink:
                       type: array
                       items:
@@ -1079,37 +843,14 @@ paths:
         200:
           description: "Success"
           schema:
-            type: object
-            properties:
-              _embedded:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        request_id:
-                          type: integer
-                        _link:
-                          type: object
-                          properties:
-                            self:
-                              type: object
-                              properties:
-                                href:
-                                  type: string
-                                method:
-                                  type: string
+            $ref: "#/definitions/PostSuccessResponse"
         401:
           description: "Общая ошибка авторизации. Неправильный логин или пароль."
     get:
       security:
         - Bearer: []
       tags:
-        - contacts
+        - customers
       parameters:
         - name: id
           in: query
@@ -1202,23 +943,7 @@ paths:
                         custom_fields:
                           type: array
                           items:
-                            type: object
-                            properties:
-                              id:
-                                type: integer
-                              name:
-                                type: string
-                              values:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    value:
-                                      type: string
-                                    enum:
-                                      type: integer
-                              is_system:
-                                type: boolean
+                            $ref: "#/definitions/EmbeddedCustomFieldResponse"
                         customers:
                           type: object
                           properties:
@@ -1240,7 +965,7 @@ paths:
         - tasks
       parameters:
         - in: body
-          name: body
+          name: tasks_post
           required: true
           schema:
             type: object
@@ -1305,30 +1030,7 @@ paths:
         200:
           description: "Success"
           schema:
-            type: object
-            properties:
-              _embedded:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        request_id:
-                          type: integer
-                        _link:
-                          type: object
-                          properties:
-                            self:
-                              type: object
-                              properties:
-                                href:
-                                  type: string
-                                method:
-                                  type: string
+            $ref: "#/definitions/PostSuccessResponse"
         401:
           description: "Общая ошибка авторизации. Неправильный логин или пароль."
     get:
@@ -1416,6 +1118,8 @@ paths:
                           type: string
                         result:
                           type: array
+                          items:
+                            type: string
                         _links:
                           $ref: '#/definitions/Links'
         401:
@@ -1425,10 +1129,10 @@ paths:
       security:
         - Bearer: []
       tags:
-        - tasks
+        - notes
       parameters:
         - in: body
-          name: body
+          name: notes_post
           required: true
           schema:
             type: object
@@ -1499,37 +1203,14 @@ paths:
         200:
           description: "Success"
           schema:
-            type: object
-            properties:
-              _embedded:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        request_id:
-                          type: integer
-                        _link:
-                          type: object
-                          properties:
-                            self:
-                              type: object
-                              properties:
-                                href:
-                                  type: string
-                                method:
-                                  type: string
+            $ref: "#/definitions/PostSuccessResponse"
         401:
           description: "Общая ошибка авторизации. Неправильный логин или пароль."
     get:
       security:
         - Bearer: []
       tags:
-        - tasks
+        - notes
       parameters:
         - name: id
           in: query
@@ -1621,10 +1302,10 @@ paths:
       security:
         - Bearer: []
       tags:
-        - tasks
+        - fields
       parameters:
         - in: body
-          name: body
+          name: fields_post
           required: true
           schema:
             type: object
@@ -1638,7 +1319,7 @@ paths:
                       type: string
                     type:
                       type: integer
-                      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17]
+                      enum: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17]
                     element_type:
                       type: integer
                     origin:
@@ -1670,30 +1351,7 @@ paths:
         200:
           description: "Success"
           schema:
-            type: object
-            properties:
-              _embedded:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        request_id:
-                          type: integer
-                        _link:
-                          type: object
-                          properties:
-                            self:
-                              type: object
-                              properties:
-                                href:
-                                  type: string
-                                method:
-                                  type: string
+            $ref: "#/definitions/PostSuccessResponse"
         401:
           description: "Общая ошибка авторизации. Неправильный логин или пароль."
   /private/api/v2/json/pipelines/set:
@@ -1704,7 +1362,7 @@ paths:
         - pipelines
       parameters:
         - in: body
-          name: body
+          name: pipelines_post
           required: true
           schema:
             type: object
@@ -1816,7 +1474,7 @@ paths:
       security:
         - Bearer: []
       tags:
-        - tasks
+        - pipelines
       parameters:
         - name: id
           in: query
@@ -1911,7 +1569,7 @@ paths:
         - pipelines
       parameters:
         - in: body
-          name: body
+          name: pipelines_post
           required: true
           schema:
             type: object
@@ -1993,7 +1651,7 @@ paths:
         - catalogs
       parameters:
         - in: body
-          name: body
+          name: catalogs_post
           required: true
           schema:
             type: object
@@ -2044,23 +1702,7 @@ paths:
         200:
           description: "Success"
           schema:
-            type: object
-            properties:
-              _links:
-                $ref: '#/definitions/Links'
-              _embedded:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        _links:
-                          $ref: '#/definitions/Links'
-
+            $ref: "#/definitions/PostSuccessResponse"
         401:
           description: "Общая ошибка авторизации. Неправильный логин или пароль."
     get:
@@ -2120,7 +1762,7 @@ paths:
         - catalog_elements
       parameters:
         - in: body
-          name: body
+          name: catalog_elements_post
           required: true
           schema:
             type: object
@@ -2139,23 +1781,7 @@ paths:
                     custom_fields:
                       type: array
                       items:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          values:
-                            type: array
-                            items:
-                              allOf:
-                                - type: string
-                                - type: object
-                                  properties:
-                                    value:
-                                      type: string
-                                    subtype:
-                                      type: string
-                                    enum:
-                                      type: string
+                        $ref: "#/definitions/EmbeddedCustomField"
               update:
                 type: array
                 items:
@@ -2174,23 +1800,7 @@ paths:
                     custom_fields:
                       type: array
                       items:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          values:
-                            type: array
-                            items:
-                              allOf:
-                                - type: string
-                                - type: object
-                                  properties:
-                                    value:
-                                      type: string
-                                    subtype:
-                                      type: string
-                                    enum:
-                                      type: string
+                        $ref: "#/definitions/EmbeddedCustomField"
               delete:
                 type: array
                 items:
@@ -2199,22 +1809,7 @@ paths:
         200:
           description: "Success"
           schema:
-            type: object
-            properties:
-              _embedded:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        request_id:
-                          type: integer
-                        _links:
-                          $ref: '#/definitions/Links'
+            $ref: "#/definitions/PostSuccessResponse"
         401:
           description: "Общая ошибка авторизации. Неправильный логин или пароль."
     get:
@@ -2270,23 +1865,7 @@ paths:
                         custom_fields:
                           type: array
                           items:
-                            type: object
-                            properties:
-                              id:
-                                type: integer
-                              name:
-                                type: string
-                              values:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    value:
-                                      type: string
-                                    enum:
-                                      type: integer
-                              is_system:
-                                type: boolean
+                            $ref: "#/definitions/EmbeddedCustomFieldResponse"
         401:
           description: "Общая ошибка авторизации. Неправильный логин или пароль."
   /api/v2/products_settings:
@@ -2297,7 +1876,7 @@ paths:
         - products_settings
       parameters:
         - in: body
-          name: body
+          name: products_settings_post
           required: true
           schema:
             type: object
@@ -2307,6 +1886,8 @@ paths:
       responses:
         200:
           description: "Success"
+          schema:
+            $ref: "#/definitions/PostSuccessResponse"
 definitions:
   Account:
     type: object
@@ -2503,3 +2084,56 @@ definitions:
             type: string
           method:
             type: string
+  EmbeddedCustomFieldResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      values:
+        type: array
+        items:
+          type: object
+          properties:
+            value:
+              type: string
+            enum:
+              type: integer
+      is_system:
+        type: boolean
+  EmbeddedCustomField:
+    type: object
+    properties:
+      id:
+        type: integer
+      values:
+        type: array
+        items:
+          allOf:
+            - type: string
+            - type: object
+              properties:
+                value:
+                  type: string
+                enum:
+                  type: string
+                subtype:
+                  type: string
+  PostSuccessResponse:
+    type: object
+    properties:
+      _embedded:
+        type: object
+        properties:
+          items:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                request_id:
+                  type: integer
+                _links:
+                  $ref: '#/definitions/Links'
